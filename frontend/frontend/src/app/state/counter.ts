@@ -1,0 +1,6 @@
+
+
+type CounterState = {
+    current: number;
+    
+}
