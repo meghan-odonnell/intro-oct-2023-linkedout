@@ -3,12 +3,12 @@ import { CommonModule } from "@angular/common";
 import { Store } from "@ngrx/store";
 import { CounterCommands } from "../state/counter.actions";
 import { CounterFeature } from "../state/counter";
+import { CountByComponent } from "./components/count-by.component";
 
 @Component({
-  selector: "app-counter",
-  standalone: true,
-  imports: [CommonModule],
-  template: `
+    selector: "app-counter",
+    standalone: true,
+    template: `
     <div>
       <button type="button" class="btn btn-primary" (click)="decrement()">
         -
@@ -21,9 +21,11 @@ import { CounterFeature } from "../state/counter";
         <button type="button" class="btn btn-warning" (click)="reset()">
           Reset</button>
       </div>
+      <app-count-by />
     </div>
   `,
-  styles: [],
+    styles: [],
+    imports: [CommonModule, CountByComponent]
 })
 export class CounterComponent {
   current = this.store.selectSignal(CounterFeature.selectCurrent);
