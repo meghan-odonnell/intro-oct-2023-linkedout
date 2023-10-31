@@ -6,5 +6,6 @@ export const CounterCommands = createActionGroup({
   events: {
     "Increment the Count": emptyProps(),
     "Decrement the Count": emptyProps(),
+    "Reset the Count":emptyProps(),
   },
 });
