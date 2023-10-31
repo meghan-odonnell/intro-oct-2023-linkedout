@@ -18,8 +18,14 @@ import { CountByComponent } from "./components/count-by.component";
         +
       </button>
       <div>
-        <button type="button" class="btn btn-warning" (click)="reset()">
-          Reset</button>
+      <button
+        [disabled]="current() === 0"
+        (click)="reset()"
+        type="button"
+        class="btn btn-warning"
+      >
+        Reset
+      </button>
       </div>
       <app-count-by />
     </div>
