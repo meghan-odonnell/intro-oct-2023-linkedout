@@ -1,9 +1,44 @@
-﻿namespace LinkedOutApi;
+﻿using Marten;
+using System.Security.Claims;
+
+namespace LinkedOutApi;
 
 public class UserService
 {
-    public async Task<Guid> GetUserId()
+    private readonly IHttpContextAccessor _contextAccessor;
+    private readonly IDocumentSession _documentSession;
+
+    public UserService(IHttpContextAccessor contextAccessor, IDocumentSession documentSession)
     {
-        return Guid.Parse("c0d83562-9ce4-41a2-8265-454edc312a56");
+        _contextAccessor = contextAccessor;
+        _documentSession = documentSession;
+    }
+
+    public async Task<Guid> GetUserIdAsync(CancellationToken token)
+    {
+        // a "map" from the subject to a user id for us.
+        var sub = _contextAccessor.HttpContext?.User.Claims.SingleOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+        if (sub is null)
+        {
+            throw new Exception("User Service Can only be used in authenticated endpoints");
+        }
+
+        // see if we already "know" this person.
+        var user = await _documentSession.Query<User>().SingleOrDefaultAsync(u => u.Sub == sub.Value, token);
+        // if they have, we will return their "local" user Id (Guid)
+        if (user is not null)
+        {
+            return user.Id;
+        }
+        else
+        {
+            var newUser = new User(Guid.NewGuid(), sub.Value);
+            _documentSession.Store(newUser);
+            await _documentSession.SaveChangesAsync(token);
+            return newUser.Id;
+        }
+
     }
 }
+
+public record User(Guid Id, string Sub);
