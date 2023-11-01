@@ -11,7 +11,7 @@ import { Store } from '@ngrx/store';
   template: `
    <div class="join">
 <button [disabled]="countingBy() === 1" (click)="setCountBy(1)" class="btn join-item">Count by 1</button>
-<button [disabled]="countingBy() === 3" (click)="setCountBy(3)" class="btn join-item">Count by 2</button>
+<button [disabled]="countingBy() === 3" (click)="setCountBy(3)" class="btn join-item">Count by 3</button>
 <button [disabled]="countingBy() === 5" (click)="setCountBy(5)" class="btn join-item">Count by 5</button>
 </div>
   `,
