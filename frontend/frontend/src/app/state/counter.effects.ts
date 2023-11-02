@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Actions, concatLatestFrom, createEffect, ofType } from "@ngrx/effects";
 import { Store } from "@ngrx/store";
-import { map, mergeMap, switchMap, tap } from "rxjs";
+import { debounceTime, map, mergeMap, switchMap, tap } from "rxjs";
 import {
   CounterCommands,
   CounterDocuments,
@@ -62,6 +62,7 @@ export class CounterEffects {
           CounterCommands.resetTheCount,
           CounterCommands.setCountBy
         ), // if itisn't one of these, forget it about it. "filter"
+        debounceTime(1000),
         concatLatestFrom(() =>
           this.store.select(CounterFeature.selectCounterFeatureState)
         ),
